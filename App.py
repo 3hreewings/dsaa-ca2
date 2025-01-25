@@ -4,9 +4,11 @@ from SortExpressions import SortExpressions
 class App():
     def __init__(self, menu_options = [EvaluateExpression(), SortExpressions()]):
         self.__menu_options = menu_options
+        self.__has_displayed_info = False  # i put this so the info page wont keep showing up
 
     def __info(self):
-        input('''
+        while True:
+            user_input = input('''
 *****************************************************************
 * ST1507 DSAA: Expression Evaluator and Sorter                  *
 *-----------------------------------------------------------    *
@@ -17,9 +19,12 @@ class App():
 *****************************************************************
               
 Press Enter, to continue....''')
+            if user_input == "":
+                self.__has_displayed_info = True
+                break
 
     def start(self, info='yes'):
-        if info == 'yes':
+        if info == 'yes' and not self.__has_displayed_info: 
             self.__info()
         choice_array = [str(i) for i in range(1, len(self.__menu_options) + 1)]
         choice_array.append(str(len(self.__menu_options) + 1))
@@ -38,4 +43,5 @@ Press Enter, to continue....''')
             print('\nBye, thanks for using ST1507 DSAA: Expression Evaluator and Sorter')
         else:
             self.__menu_options[int(menu_input) - 1].run()
-            self.start()
+            input("Press any key to continue...")
+            self.start(info='no')
