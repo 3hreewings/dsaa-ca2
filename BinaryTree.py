@@ -120,6 +120,8 @@ def buildParseTree(tokens):
             raise ValueError(token)
     return tree
 
+from ErrorHandling import InvalidExpression
+
 def parser(expression):
     if not expression:
         raise InvalidExpression("Expression cannot be empty", expression)
@@ -136,7 +138,7 @@ def parser(expression):
         if not x.isdigit() and x not in operators:
             raise InvalidExpression(f"Invalid character '{x}' in expression", expression, i)
         if x == ' ':
-            pass
+            continue  # Ignore spaces
         elif x == '(':
             open_parentheses += 1
             tokens.append(x)
@@ -145,10 +147,17 @@ def parser(expression):
                 raise InvalidExpression(f"Unmatched closing parenthesis at position {i}", expression, i)
             open_parentheses -= 1
             tokens.append(x)
-        elif x in operators and (not tokens or tokens[-1] in operators):
-            raise InvalidExpression(f"Invalid expression, expression should not end with an operator at position {i}", expression, i)
-        elif x == '-' and token == '' and (not tokens or tokens[-1] in '(*'):
-            token += x
+        elif x in ['+', '-', '*', '/']:
+            if x == '-' and (not tokens or tokens[-1] in ['(', '+', '-', '*', '/']):
+                # Handle unary minus
+                token += x
+            elif not tokens or tokens[-1] in operators or tokens[-1] == '(':
+                raise InvalidExpression(f"Invalid operator usage at position {i}", expression, i)
+            else:
+                if token:
+                    tokens.append(token)
+                    token = ''
+                tokens.append(x)
         elif x.isdigit() or x == '.':
             token += x
         elif x == '*' and tokens and tokens[-1] == '*':
