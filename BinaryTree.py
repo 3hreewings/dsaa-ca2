@@ -123,54 +123,54 @@ def buildParseTree(tokens):
 from ErrorHandling import InvalidExpression
 
 def parser(expression):
-    if not expression:
-        raise InvalidExpression("Expression cannot be empty", expression)
+        if not expression:
+            raise InvalidExpression("Expression cannot be empty", expression)
 
-    tokens = []
-    token = ''
-    operators = ['/', '*', '-', '+', '(', ')', ' ', '.']
-    open_parentheses = 0
+        tokens = []
+        token = ''
+        operators = ['/', '*', '-', '+', '(', ')', ' ', '.']
+        open_parentheses = 0
 
-    if expression[0] != '(':
-        raise InvalidExpression("Expression must start with an opening parenthesis", expression, 0)
+        if expression[0] != '(':
+            raise InvalidExpression("Expression must start with an opening parenthesis", expression, 0)
 
-    for i, x in enumerate(expression):
-        if not x.isdigit() and x not in operators:
-            raise InvalidExpression(f"Invalid character '{x}' in expression", expression, i)
-        if x == ' ':
-            continue  # Ignore spaces
-        elif x == '(':
-            open_parentheses += 1
-            tokens.append(x)
-        elif x == ')':
-            if open_parentheses == 0:
-                raise InvalidExpression(f"Unmatched closing parenthesis at position {i}", expression, i)
-            open_parentheses -= 1
-            tokens.append(x)
-        elif x in ['+', '-', '*', '/']:
-            if x == '-' and (not tokens or tokens[-1] in ['(', '+', '-', '*', '/']):
-                # Handle unary minus
-                token += x
-            elif not tokens or tokens[-1] in operators or tokens[-1] == '(':
-                raise InvalidExpression(f"Invalid operator usage at position {i}", expression, i)
-            else:
+        for i, x in enumerate(expression):
+            if not x.isdigit() and x not in operators:
+                raise InvalidExpression(f"Invalid character '{x}' in expression", expression, i)
+            if x == ' ':
+                continue  # Ignore spaces
+            elif x == '(':
+                open_parentheses += 1
+                tokens.append(x)
+            elif x == ')':
+                if open_parentheses == 0:
+                    raise InvalidExpression(f"Unmatched closing parenthesis at position {i}", expression, i)
+                open_parentheses -= 1
                 if token:
                     tokens.append(token)
                     token = ''
                 tokens.append(x)
-        elif x.isdigit() or x == '.':
-            token += x
-        elif x == '*' and tokens and tokens[-1] == '*':
-            tokens[-1] += x
-        else:
-            if token != '':
-                tokens.append(token)
-                token = ''
-            tokens.append(x)
-    if token != '':
-        tokens.append(token)
-    if open_parentheses != 0:
-        raise InvalidExpression("Unmatched opening parenthesis", expression)
-    if tokens[-1] in operators:
-        raise InvalidExpression("Expression cannot end with an operator", expression)
-    return tokens
+            elif x in ['+', '-', '*', '/']:
+                if x == '-' and (not tokens or tokens[-1] in ['(', '+', '-', '*', '/']):
+                    token += x
+                else:
+                    if token:
+                        tokens.append(token)
+                        token = ''
+                    tokens.append(x)
+            elif x.isdigit() or x == '.':
+                token += x
+            elif x == '*' and tokens and tokens[-1] == '*':
+                tokens[-1] += x
+            else:
+                if token != '':
+                    tokens.append(token)
+                    token = ''
+                tokens.append(x)
+        if token != '':
+            tokens.append(token)
+        if open_parentheses != 0:
+            raise InvalidExpression("Unmatched opening parenthesis", expression)
+        if tokens[-1] in ['+', '-', '*', '/']:
+            raise InvalidExpression("Expression cannot end with an operator", expression)
+        return tokens
