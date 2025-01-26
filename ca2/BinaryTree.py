@@ -1,5 +1,3 @@
-from ErrorHandling import InvalidExpression
-
 class BinaryTree:
     def __init__(self, key, leftTree=None, rightTree=None):
         self.key = key
@@ -121,47 +119,23 @@ def buildParseTree(tokens):
     return tree
 
 def parser(expression):
-    if not expression:
-        raise InvalidExpression("Expression cannot be empty", expression)
-
     tokens = []
     token = ''
     operators = ['/', '*', '-', '+', '(', ')', ' ', '.']
-    open_parentheses = 0
-
-    if expression[0] != '(':
-        raise InvalidExpression("Expression must start with an opening parenthesis", expression, 0)
-
-    for i, x in enumerate(expression):
+    for x in expression:
         if not x.isdigit() and x not in operators:
-            raise InvalidExpression(f"Invalid character '{x}' in expression", expression, i)
+            return 'Please enter a valid expression!'
         if x == ' ':
             pass
-        elif x == '(':
-            open_parentheses += 1
-            tokens.append(x)
-        elif x == ')':
-            if open_parentheses == 0:
-                raise InvalidExpression(f"Unmatched closing parenthesis at position {i}", expression, i)
-            open_parentheses -= 1
-            tokens.append(x)
-        elif x in operators and (not tokens or tokens[-1] in operators):
-            raise InvalidExpression(f"Invalid expression, expression should not end with an operator at position {i}", expression, i)
         elif x == '-' and token == '' and (not tokens or tokens[-1] in '(*'):
             token += x
         elif x.isdigit() or x == '.':
             token += x
-        elif x == '*' and tokens and tokens[-1] == '*':
+        elif x == '*' and tokens [-1] == '*':
             tokens[-1] += x
         else:
             if token != '':
                 tokens.append(token)
                 token = ''
             tokens.append(x)
-    if token != '':
-        tokens.append(token)
-    if open_parentheses != 0:
-        raise InvalidExpression("Unmatched opening parenthesis", expression)
-    if tokens[-1] in operators:
-        raise InvalidExpression("Expression cannot end with an operator", expression)
     return tokens
