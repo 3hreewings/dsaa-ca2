@@ -11,33 +11,34 @@ class SortExpressions:
             print("No expressions found in the input file.")
             return
 
-        print(">>>Evaluation and sorting started:")
+        print(">>>Evaluation and sorting started:\n")
 
-        # Evaluate expressions
         evaluated_expressions = []
-        for expr in expressions:
+        for line in expressions:
             try:
-                value = self.evaluate_expression(expr)
-                length = len(expr.replace(" ", ""))  # accounts for possible spaces in expression
-                brackets = expr.count('(') + expr.count(')')
-                evaluated_expressions.append((value, length, brackets, expr))
+                value = self.evaluate_expression(line)
+                length = len(line.replace(" ", ""))  # accounts for possible spaces in expression
+                brackets = line.count('(') + line.count(')')
+                evaluated_expressions.append((value, length, brackets, line))
             except InvalidExpression as e:
-                print(f"Error evaluating expression '{expr}': {e}")
-            except Exception as e:
-                print(f"Unexpected error evaluating expression '{expr}': {e}")
+                print(f"Error evaluating expression '{line}': {e}")
+            # except Exception as e:
+            #     print(f"Unexpected error evaluating expression '{line}': {e}")
 
         evaluated_expressions.sort(key=lambda x: (-x[0], x[1], x[2]))
 
         sorted_expressions = []
         current_value = None
-        for value, length, brackets, expr in evaluated_expressions:
+        for value, length, brackets, line in evaluated_expressions:
             if value != current_value:
+                sorted_expressions.append('\n')
                 if current_value is not None:
                     print()
                 current_value = value
-                print(f"*** Expressions with value=> {value}")
-            print(f"{expr}==>{value}")
-            sorted_expressions.append(f"{expr}==>{value}")
+                print(f"*** Expressions with value= {value}")
+                sorted_expressions.append(f"*** Expressions with value= {value}")
+            print(f"{line}==>{value}")
+            sorted_expressions.append(f"{line}==>{value}")
 
         file.write_expressions(sorted_expressions)
 

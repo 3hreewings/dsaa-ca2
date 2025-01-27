@@ -24,7 +24,5 @@ class AccessFile:
             with open(self.output_file, 'w') as outfile:
                 for expr in expressions:
                     outfile.write(expr + '\n')
-        except PermissionError:
-            print(f"Error: Permission denied for file '{self.output_file}'.")
         except Exception as e:
             print(f"Unexpected error while writing to file '{self.output_file}': {e}")
