@@ -22,18 +22,20 @@ class SortExpressions:
                 evaluated_expressions.append((value, length, brackets, line))
             except InvalidExpression as e:
                 print(f"Error evaluating expression '{line}': {e}")
-            # except Exception as e:
-            #     print(f"Unexpected error evaluating expression '{line}': {e}")
+            except Exception as e:
+                print(f"Unexpected error evaluating expression '{line}': {e}")
 
         evaluated_expressions.sort(key=lambda x: (-x[0], x[1], x[2]))
 
         sorted_expressions = []
         current_value = None
+        first_group = True
         for value, length, brackets, line in evaluated_expressions:
             if value != current_value:
-                sorted_expressions.append('\n')
-                if current_value is not None:
+                if not first_group:
+                    sorted_expressions.append('\n')
                     print()
+                first_group = False
                 current_value = value
                 print(f"*** Expressions with value= {value}")
                 sorted_expressions.append(f"*** Expressions with value= {value}")

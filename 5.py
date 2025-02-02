@@ -142,7 +142,7 @@ class Parser():
     
 # Task 1 - Program
 
-exp = '((200 + (4*3.14)) / (2**3) )'
+exp = '(106-100)'
 parser = Parser()
 tokens = parser.parse(exp)
 tree = parser.buildParseTree(tokens)
