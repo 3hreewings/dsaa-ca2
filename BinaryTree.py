@@ -172,7 +172,7 @@ def parser(expression):
                 errors.append((start, end))
             else:
                 paren_stack.pop()
-    for position, token in paren_stack:
+    for position in paren_stack:
         errors.append((position, position))
 
     if errors:
