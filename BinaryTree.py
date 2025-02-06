@@ -1,4 +1,5 @@
-from ErrorHandling import InvalidExpression
+from ErrorHandling import ParseError
+import re
 
 class BinaryTree:
     def __init__(self, key, leftTree=None, rightTree=None):
@@ -121,44 +122,63 @@ def buildParseTree(tokens):
     return tree
 
 def parser(expression):
-    if not expression:
-        raise InvalidExpression("Expression cannot be empty", expression)
-    
-    operators = ['/', '*', '-', '+', '(', ')', ' ', '.']
-    open_parentheses = 0
-    tokens = []
-    token = ''
+    token_regex = r'\d+(?:\s*\d+)*(?:\s*\.\s*\d+(?:\s*\d+)*)?|\.\s*\d+(?:\s*\d+)*|\*\*|[+\-*/()]'
+    operators = {'+', '-', '*', '/', '**'}
 
-    if expression[0] != '(':
-        raise InvalidExpression("Expression must start with an opening parenthesis", expression, 0)
-    
-    for x in expression:
-        if not x.isdigit() and x not in operators:
-            raise InvalidExpression(f"Invalid character '{x}' in expression", expression)
-        elif x == ' ':
-            continue
-        elif x == '(':
-            open_parentheses += 1
-            tokens.append(x)
-        elif x == ')':
-            if open_parentheses == 0:
-                raise InvalidExpression(f"Unmatched closing parenthesis at position {i}", expression, i)
-            open_parentheses -= 1
-            if token:
-                tokens.append(token)
-                token = ''
-            tokens.append(x)
-        elif x == '-' and token == '' and (not tokens or tokens[-1] in '(*'):
-            token += x
-        elif x.isdigit() or x == '.':
-            token += x
-        elif x == '*' and tokens [-1] == '*':
-            tokens[-1] += x
-        elif tokens[-1] in ['+', '-', '*', '/']:
-            raise InvalidExpression("Expression cannot end with an operator", expression)
+    tokens = [(match.group(), *match.span()) for match in re.finditer(token_regex, expression)] # Contains tuples of (token, start, end)
+
+    if tokens[0][0] == '-' and len(tokens) > 1 and re.search(r'\d', tokens[1][0]):
+        tokens[0] = ('-' + tokens[1][0], tokens[0][1], tokens[1][2])
+        tokens.pop(1)
+    i = 1
+    while i < len(tokens) - 1:
+        prev_token, prev_start, prev_end = tokens[i - 1]
+        cur_token, cur_start, cur_end = tokens[i]
+        next_token, next_start, next_end = tokens[i + 1]
+        if cur_token == '-' and (prev_token in operators or prev_token == '(') and re.search(r'\d', next_token):
+            tokens[i] = ('-' + next_token, cur_start, next_end)
+            tokens.pop(i + 1)
         else:
-            if token != '':
-                tokens.append(token)
-                token = ''
-            tokens.append(x)
+            i += 1
+
+    errors = [] # Contains tuples of (start, end)
+
+    # Check for invalid characters
+    errors.extend([(match.start(), match.end()) for match in re.finditer(r'[^\d+\-*/().() ]', expression)])
+
+    # Check for whitespace in tokens
+    for (token, start, end) in tokens:
+        if ' ' in token:
+            errors.append((start, end))
+
+    # Check that operators have closing parentheses or numbers on the left and opening parentheses or numbers on the right
+    for i in range(1, len(tokens) - 1):
+        prev_token, prev_start, prev_end = tokens[i - 1]
+        cur_token, cur_start, cur_end = tokens[i]
+        next_token, next_start, next_end = tokens[i + 1]
+        if cur_token in operators:
+            if prev_token != ')' and not re.search(r'\d', prev_token):
+                errors.append((prev_end, cur_end))
+            if next_token != '(' and not re.search(r'\d', next_token):
+                errors.append((cur_start, next_start))
+
+    # Check for matching parentheses
+    paren_stack = []
+    for (token, start, end) in tokens:
+        if token == '(':
+            paren_stack.append((start))
+        elif token == ')':
+            if not paren_stack:
+                errors.append((start, end))
+            else:
+                paren_stack.pop()
+    for position, token in paren_stack:
+        errors.append((position, position))
+
+    if errors:
+        for error in errors:
+            (start, end) = error
+            error = (start + end) // 2
+        raise ParseError('Invalid expression', expression, errors)
+
     return tokens

@@ -13,3 +13,13 @@ class ExpressionError(Exception):
 class InvalidExpression(ExpressionError):
     def __init__(self, message, expression=None, position=None):
         super().__init__(message, expression, position)
+
+class ParseError(ExpressionError):
+    def __init__(self, message, expression=None, position=None):
+        super().__init__(message, expression, position)
+
+    def __str__(self):
+        arrowline = list(' ' * (len(self.expression)))
+        for start, end in self.position:
+            arrowline[(start + end) // 2] = '^'
+        return '\n' + self.expression + '\n' + arrowline

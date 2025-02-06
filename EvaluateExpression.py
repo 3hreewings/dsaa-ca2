@@ -1,5 +1,5 @@
 from BinaryTree import parser, buildParseTree
-from ErrorHandling import InvalidExpression
+from ErrorHandling import ParseError
 
 class EvaluateExpression:
     def run(self, expression=None):
@@ -11,7 +11,7 @@ class EvaluateExpression:
             print('\nExpression Tree:')
             tree.printInorder()
             print(f'Expression evaluates to:\n{tree.evaluate()}')
-        except InvalidExpression as e:
+        except ParseError as e:
             print(f"Error: {e}")
 
     def __str__(self):
