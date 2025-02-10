@@ -1,4 +1,4 @@
-from ErrorHandling import ParseError
+from ErrorHandling import ParseError, MathError
 import re
 
 class BinaryTree:
@@ -55,9 +55,13 @@ class BinaryTree:
             elif op == '*':
                 return leftTree.evaluate() * rightTree.evaluate()
             elif op == '/':
+                if rightTree.evaluate() == 0:
+                    raise MathError('Cannot divide by 0')
                 return leftTree.evaluate() / rightTree.evaluate()
             elif op == '**':
                 return leftTree.evaluate() ** rightTree.evaluate()
+            else:
+                raise ParseError('Unexpected parse error - expression invalid')
         else:
             return self.key
 
@@ -122,10 +126,21 @@ def buildParseTree(tokens):
     return tree
 
 def parser(expression):
+    if len(expression) == 0:
+        raise ParseError('Expression cannot be empty')
+
+    invalid_chars = [match.span() for match in re.finditer(r'[^0-9\.+\-*/()\s]', expression)] # Contains tuples of (start, end)
+    if invalid_chars:
+        raise ParseError('Invalid characters', expression, invalid_chars)
+    
+    if expression.strip()[0] != '(' or expression.strip()[-1] != ')':
+        raise ParseError('Expression should start and end with parantheses')
+
     token_regex = r'\d+(?:\s*\d+)*(?:\s*\.\s*\d+(?:\s*\d+)*)?|\.\s*\d+(?:\s*\d+)*|\*\*|[+\-*/()]'
     operators = {'+', '-', '*', '/', '**'}
 
     tokens = [(match.group(), *match.span()) for match in re.finditer(token_regex, expression)] # Contains tuples of (token, start, end)
+    errors = [] # Contains tuples of (start, end)
 
     if tokens[0][0] == '-' and len(tokens) > 1 and re.search(r'\d', tokens[1][0]):
         tokens[0] = ('-' + tokens[1][0], tokens[0][1], tokens[1][2])
@@ -141,15 +156,35 @@ def parser(expression):
         else:
             i += 1
 
-    errors = [] # Contains tuples of (start, end)
-
-    # Check for invalid characters
-    errors.extend([(match.start(), match.end()) for match in re.finditer(r'[^\d+\-*/().() ]', expression)])
-
     # Check for whitespace in tokens
     for (token, start, end) in tokens:
         if ' ' in token:
             errors.append((start, end))
+
+    for i in range(1, len(tokens) - 1):
+        prev_token, prev_start, prev_end = tokens[i - 1]
+        cur_token, cur_start, cur_end = tokens[i]
+        next_token, next_start, next_end = tokens[i + 1]
+
+        if cur_token in operators:
+            # Check left side (must be a number or closing parenthesis)
+            if prev_token != ')' and not re.search(r'\d', prev_token):
+                errors.append((prev_end, cur_end))
+            
+            # Check right side (must be a number or opening parenthesis)
+            if next_token != '(' and not re.search(r'\d', next_token):
+                errors.append((cur_start, next_start))
+
+            # Ensure operator is inside parentheses
+            inside_parentheses = False
+            for j in range(i - 1, -1, -1):
+                if tokens[j][0] == '(':
+                    inside_parentheses = True
+                    break
+                elif tokens[j][0] in operators:
+                    break
+            if not inside_parentheses:
+                errors.append((cur_start, cur_end))
 
     # Check that operators have closing parentheses or numbers on the left and opening parentheses or numbers on the right
     for i in range(1, len(tokens) - 1):

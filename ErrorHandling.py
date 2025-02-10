@@ -19,7 +19,13 @@ class ParseError(ExpressionError):
         super().__init__(message, expression, position)
 
     def __str__(self):
-        arrowline = list(' ' * (len(self.expression)))
-        for start, end in self.position:
-            arrowline[(start + end) // 2] = '^'
-        return '\n' + self.expression + '\n' + arrowline
+        if self.expression and self.position is not None:
+            arrowline = list(' ' * (len(self.expression)))
+            for start, end in self.position:
+                arrowline[(start + end) // 2] = '^'
+            return '\n' + self.expression + '\n' + ''.join(arrowline) + '\n' + self.message
+        return self.message
+    
+class MathError(ExpressionError):
+    def __init__(self, message):
+        super().__init__(message, None, None)
