@@ -7,7 +7,7 @@ class EvaluateExpression:
             expression = input('Enter an expression to evaluate: ')
         try:
             tokens = parser(expression)
-            tree = buildParseTree([token[0] for token in tokens])
+            tree = buildParseTree(tokens)
             print('\nExpression Tree:')
             tree.printInorder()
             print(f'Expression evaluates to:\n{tree.evaluate()}')

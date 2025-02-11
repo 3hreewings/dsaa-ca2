@@ -216,4 +216,4 @@ def parser(expression):
             error = (start + end) // 2
         raise ParseError('Invalid expression', expression, errors)
 
-    return tokens
+    return [token[0] for token in tokens]
