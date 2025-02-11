@@ -26,3 +26,25 @@ class AccessFile:
                     outfile.write(expr + '\n')
         except Exception as e:
             print(f"Unexpected error while writing to file '{self.output_file}': {e}")
+            
+
+def getInputOption():
+    while True:
+        print("Select input option:")
+        print("1. Direct input")
+        print("2. File input")
+        option = input("Enter your choice (1 or 2): ")
+        if option in ['1', '2']:
+            return int(option)
+        else:
+            print("Invalid choice. Please enter 1 or 2.")
+            
+def getDP(self):
+    while True:
+        try:
+            decimal_places = int(input("Enter the number of decimal places for the result (0 - 15): "))
+            if decimal_places < 0 or decimal_places > 15:
+                raise ValueError
+            return decimal_places
+        except ValueError:
+            print("Please enter a valid integer within the range (0 - 15).")

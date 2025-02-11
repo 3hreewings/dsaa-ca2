@@ -209,3 +209,10 @@ def parseTrig(expression):
     
     return tokens
 
+if __name__ == "__main__":
+    test = '((cos(0) + 2) * 3)'
+    tokens = parseTrig(test)
+    print(tokens)
+    tree = constructParseTree(tokens)
+    tree = pruneNodes(tree)
+    print(f'{test}= {tree.evaluate()}')
