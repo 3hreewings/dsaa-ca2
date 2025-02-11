@@ -71,7 +71,4 @@ class RearrangeExpression:
         return value
 
     def __str__(self):
-        return 'Rearrange expressions by number size'
-
-lols = RearrangeExpression()
-lols.run()
+        return 'Rearrange expressions by descending number (Phylicia Ng)'

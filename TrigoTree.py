@@ -155,7 +155,7 @@ def combine_negative_tokens(tokens, trig_functions):
     return new_tokens
 
 def parseTrig(expression):
-    if len(expression.strip()) == 0:
+    if expression == '()' or len(expression.strip()) == 0:
         raise ParseError('Expression cannot be empty', expression, [])
     token_regex = r'-?\d+(?:\.\d+)?|\*\*|[+\-*/()]|sin|cos|tan'
     binary_operators = {'+', '-', '*', '/', '**'}
@@ -208,11 +208,3 @@ def parseTrig(expression):
         raise ParseError('Invalid expression', expression, errors)
     
     return tokens
-
-if __name__ == "__main__":
-    test = '((cos(0) + 2) * 3)'
-    tokens = parseTrig(test)
-    print(tokens)
-    tree = constructParseTree(tokens)
-    tree = pruneNodes(tree)
-    print(f'{test}= {tree.evaluate()}')

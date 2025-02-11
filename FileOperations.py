@@ -30,10 +30,10 @@ class AccessFile:
 
 def getInputOption():
     while True:
-        print("Select input option:")
+        print("\nSelect input option:")
         print("1. Direct input")
         print("2. File input")
-        option = input("Enter your choice (1 or 2): ")
+        option = input("\nEnter your choice (1 or 2): ")
         if option in ['1', '2']:
             return int(option)
         else:
@@ -42,7 +42,7 @@ def getInputOption():
 def getDP(self):
     while True:
         try:
-            decimal_places = int(input("Enter the number of decimal places for the result (0 - 15): "))
+            decimal_places = int(input("\nEnter the number of decimal places for the result (0 - 15): "))
             if decimal_places < 0 or decimal_places > 15:
                 raise ValueError
             return decimal_places

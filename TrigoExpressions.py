@@ -58,8 +58,3 @@ class TrigoExpressions:
 
     def __str__(self):
         return 'Trigonometric expressions (Phylicia Ng)'
-
-# Main function to run the TrigoExpressions class
-if __name__ == "__main__":
-    lols = TrigoExpressions()
-    lols.run()
