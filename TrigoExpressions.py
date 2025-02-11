@@ -54,6 +54,7 @@ class TrigoExpressions:
         tokens = parseTrig(expression)
         tree = constructParseTree(tokens)
         tree = pruneNodes(tree)
+        print('\nExpression Tree:')
         tree.printInorder()
         return tree.evaluate()
 

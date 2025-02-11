@@ -1,6 +1,6 @@
 from TrigoTree import parseTrig, constructParseTree, pruneNodes
 from FileOperations import AccessFile, getInputOption, getDP
-from ErrorHandling import InvalidExpression
+from ErrorHandling import InvalidExpression, ParseError, MathError
 import re
 
 class RearrangeExpression:
@@ -12,17 +12,27 @@ class RearrangeExpression:
             sorted_expression = self.sortNumbers(expression)
             print(f"Original expression: {expression}")
             print(f"Sorted expression: {sorted_expression}")
-            result = self.evaluate_expression(sorted_expression)
-            result = self.format_result(result, decimal_places)
-            print(f"Result: {result}")
+            try:
+                result = self.evaluate_expression(sorted_expression)
+                result = self.format_result(result, decimal_places)
+                print(f"Result: {result}")
+            except (ParseError, MathError) as e:
+                print(f"Error: {e}")
         elif input_option == 2:
             input_file = input("Enter the input file path: ")
             output_file = input("Enter the output file path: ")
             file = AccessFile(input_file, output_file)
             expressions = file.read_expressions()
             sorted_expressions = [self.sortNumbers(expr) for expr in expressions]
-            results = [self.evaluate_expression(expr) for expr in sorted_expressions]
-            results = [self.format_result(res, decimal_places) for res in results]
+            results = []
+            for sorted_expr in sorted_expressions:
+                try:
+                    result = self.evaluate_expression(sorted_expr)
+                    result = self.format_result(result, decimal_places)
+                    results.append(result)
+                except (ParseError, MathError) as e:
+                    print(f"Error: {e}")
+                    results.append(None)
             file.write_expressions(sorted_expressions)
             print("\nSorted expressions and their results have been written to the output file.")
             for original_expr, sorted_expr, result in zip(expressions, sorted_expressions, results):
