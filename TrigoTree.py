@@ -23,14 +23,26 @@ class BinaryTree:
             self.rightTree = tree
 
     def printInorder(self):
-        def inorderRecur(tree, out):
-            if tree:
-                inorderRecur(tree.leftTree, out)
-                out.append(str(tree.key))
-                inorderRecur(tree.rightTree, out)
+        def inorderRecur(tree, y, out):
+            nonlocal x
+            if tree.leftTree != None:
+                inorderRecur(tree.leftTree, y+1, out)
+            while len(out) <= y + len(str(tree.key)):
+                out.append([])
+            for i, char in enumerate(str(tree.key)):
+                while len(out[y+i]) <= x + 1:
+                    out[y+i].append(' ')
+                out[y+i][x] = char + ''
+            x += 1
+            if tree.rightTree != None:
+                inorderRecur(tree.rightTree, y+1, out)
+            y -= 1
+        x = 0
+        y = 0
         out = []
-        inorderRecur(self, out)
-        print(" ".join(out))
+        inorderRecur(self, y, out)
+        for row in out:
+            print(''.join(row))
     
     def evaluate(self):
         leftTree = self.leftTree
