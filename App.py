@@ -1,11 +1,12 @@
 from EvaluateExpression import EvaluateExpression
 from SortExpressions import SortExpressions
-from GenerateSolutions import Generate_Solutions
+from GenerateSolutions import GenerateSolutions
 from TrigoExpressions import TrigoExpressions
 from RearrangeNumbers import RearrangeExpression
+from GradientDescent import GradientDescent
 
 class App():
-    def __init__(self, menu_options = [EvaluateExpression(), SortExpressions(), Generate_Solutions(), TrigoExpressions(), RearrangeExpression()]):
+    def __init__(self, menu_options = [EvaluateExpression(), SortExpressions(), GenerateSolutions(), GradientDescent(), TrigoExpressions(), RearrangeExpression()]):
         self.__menu_options = menu_options
 
     def __info(self):

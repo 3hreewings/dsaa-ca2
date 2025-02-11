@@ -3,7 +3,7 @@ import re
 from FileOperations import AccessFile
 from ErrorHandling import ParseError
 
-class Generate_Solutions:
+class GenerateSolutions:
     def run(self):
         file = AccessFile('None', None)
 
