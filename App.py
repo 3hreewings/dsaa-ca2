@@ -1,8 +1,9 @@
 from EvaluateExpression import EvaluateExpression
 from SortExpressions import SortExpressions
+from GenerateSolutions import Generate_Solutions
 
 class App():
-    def __init__(self, menu_options = [EvaluateExpression(), SortExpressions()]):
+    def __init__(self, menu_options = [EvaluateExpression(), SortExpressions(), Generate_Solutions()]):
         self.__menu_options = menu_options
 
     def __info(self):
