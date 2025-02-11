@@ -1,3 +1,9 @@
+# =============================================================================
+# Authors: Wang Jun Xian (2309011) & Phylicia Ng (2308908)
+# Date: 12/2/2025
+# Description: Sort Expressions - sort expressions by evaluation, length and brackets
+# =============================================================================
+
 from BinaryTree import parser, buildParseTree
 from FileOperations import AccessFile
 from ErrorHandling import InvalidExpression

@@ -1,3 +1,9 @@
+# =============================================================================
+# Authors: Wang Jun Xian (2309011) & Phylicia Ng (2308908)
+# Date: 12/2/2025
+# Description: Evaluate expression - print expression binary tree and evaluate
+# =============================================================================
+
 from BinaryTree import parser, buildParseTree
 from ErrorHandling import ParseError, MathError
 

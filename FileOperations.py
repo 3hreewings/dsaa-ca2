@@ -1,3 +1,9 @@
+# =============================================================================
+# Authors: Wang Jun Xian (2309011) & Phylicia Ng (2308908)
+# Date: 12/2/2025
+# Description: Input/output filepath prompts and read/write file functions
+# =============================================================================
+
 class AccessFile:
     def __init__(self, input_file=None, output_file=None):
         if input_file is None:

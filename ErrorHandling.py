@@ -1,3 +1,9 @@
+# =============================================================================
+# Authors: Wang Jun Xian (2309011) & Phylicia Ng (2308908)
+# Date: 12/2/2025
+# Description: Contains exception classes for errors
+# =============================================================================
+
 class ExpressionError(Exception):
     def __init__(self, message, expression=None, position=None):
         super().__init__(message)

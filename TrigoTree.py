@@ -1,3 +1,9 @@
+# =============================================================================
+# Authors: Wang Jun Xian (2309011) & Phylicia Ng (2308908)
+# Date: 12/2/2025
+# Description: BinaryTree, parser and buildParseTree with trigonometric support
+# =============================================================================
+
 import re
 import math
 from ErrorHandling import ParseError, MathError

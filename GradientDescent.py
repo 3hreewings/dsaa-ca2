@@ -1,3 +1,9 @@
+# =============================================================================
+# Authors: Wang Jun Xian (2309011) & Phylicia Ng (2308908)
+# Date: 12/2/2025
+# Description: Gradient Descent - find local minimum of a function
+# =============================================================================
+
 from BinaryTree import parser, buildParseTree
 from ErrorHandling import ParseError, MathError
 
@@ -53,6 +59,6 @@ class GradientDescent:
             print(f'Error: {e}')
 
     def __str__(self):
-        return 'Evaluate expression'
+        return 'Gradient Descent (Wang Jun Xian)'
     
 # (((4*(x**2))-(4*x))+3)

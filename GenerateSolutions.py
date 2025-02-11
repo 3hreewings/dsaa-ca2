@@ -1,3 +1,9 @@
+# =============================================================================
+# Authors: Wang Jun Xian (2309011) & Phylicia Ng (2308908)
+# Date: 12/2/2025
+# Description: Generate Solutions - find all combinations for given characters which evaluate to target value
+# =============================================================================
+
 import operator
 import re
 from FileOperations import AccessFile
@@ -70,4 +76,4 @@ class GenerateSolutions:
         return expressions
     
     def __str__(self):
-        return 'Generate solutions'
+        return 'Generate solutions (Wang Jun Xian)'

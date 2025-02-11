@@ -1,3 +1,9 @@
+# =============================================================================
+# Authors: Wang Jun Xian (2309011) & Phylicia Ng (2308908)
+# Date: 12/2/2025
+# Description: App info and option selection menu
+# =============================================================================
+
 from EvaluateExpression import EvaluateExpression
 from SortExpressions import SortExpressions
 from GenerateSolutions import GenerateSolutions

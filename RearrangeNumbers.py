@@ -1,3 +1,9 @@
+# =============================================================================
+# Authors: Wang Jun Xian (2309011) & Phylicia Ng (2308908)
+# Date: 12/2/2025
+# Description: Rearrange Expression - bubblesort expression
+# =============================================================================
+
 from TrigoTree import parseTrig, constructParseTree, pruneNodes
 from FileOperations import AccessFile, getInputOption, getDP
 from ErrorHandling import InvalidExpression, ParseError, MathError
