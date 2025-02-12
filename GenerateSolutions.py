@@ -19,7 +19,7 @@ class GenerateSolutions:
             print('Error:', ParseError('Invalid characters', numbers, errors))
             return
 
-        numbers = list(map(int, input('Enter numbers separated by commas: ').split()))
+        numbers = list(map(int, numbers.split(',')))
         target = int(input('Enter the target value: '))
         solutions = self.__get_expressions(numbers, target)
 
